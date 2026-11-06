@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#6bb9ef" />
+    <meta name="description" content="Block Isle — a pocket-sized voxel island. Mine, build and explore with touch or keyboard." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%238fdb5f' d='M16 3l13 7v12l-13 7L3 22V10z'/%3E%3Cpath fill='%2358a63b' d='M16 17l13-7v12l-13 7z'/%3E%3Cpath fill='%2379c84e' d='M16 17v12L3 22V10z'/%3E%3C/svg%3E" />
+    <title>Block Isle — Pocket Voxel Sandbox</title>
+  </head>
+  <body>
+    <div id="game-shell">
+      <canvas id="game" aria-label="Block Isle 3D world"></canvas>
+
+      <div id="hud" class="hidden">
+        <div id="hud-top">
+          <div class="identity">
+            <div class="brand"><span class="brand-cube"></span>BLOCK<span class="brand-isle">ISLE</span></div>
+            <div class="world-meta"><span id="dayLabel">DAY 1</span><span class="meta-dot">•</span><span id="clock">08:00</span><span class="meta-dot">•</span><span id="modeLabel">CREATIVE</span></div>
+          </div>
+          <div class="top-actions">
+            <button id="soundBtn" class="icon-btn" title="Toggle sound" aria-label="Toggle sound">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4zm12.5 3a4.5 4.5 0 0 0-2-3.74v7.48A4.5 4.5 0 0 0 16.5 12zm-2-7.5v2.06a6.5 6.5 0 0 1 0 10.88v2.06A8.5 8.5 0 0 0 14.5 4.5z"/></svg>
+            </button>
+            <button id="helpBtn" class="icon-btn" title="How to play" aria-label="How to play">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 17h-2v-2h2v2zm1.7-7.3-.9.9c-.7.7-1.1 1.3-1.1 2.4h-2v-.5c0-1 .4-1.9 1.1-2.6l1.2-1.2c.3-.3.5-.8.5-1.3a2 2 0 0 0-4 0H7a4 4 0 1 1 8 0c0 .8-.3 1.5-.9 2.1z"/></svg>
+            </button>
+            <button id="menuBtn" class="icon-btn" title="Menu" aria-label="Open menu">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div id="goalCard" class="goal-card">
+          <div class="goal-top"><span id="goalKicker">ISLAND GOAL 1</span><span id="goalProgress">0 / 3</span></div>
+          <div id="goalLabel">Chop 3 oak logs</div>
+          <div class="goal-track"><div id="goalFill"></div></div>
+        </div>
+
+        <div id="crosshair" aria-hidden="true"><span></span><span></span><i></i></div>
+        <div id="toast" role="status"></div>
+        <div id="waterTint"></div>
+
+        <div id="touch-controls" class="hidden">
+          <div id="joystick" aria-label="Movement joystick">
+            <div id="joystickBase"><div id="joystickKnob"></div></div>
+          </div>
+          <button id="jumpBtn" class="touch-btn jump" aria-label="Jump">
+            <svg viewBox="0 0 24 24"><path d="M12 4l7 7h-4v7H9v-7H5l7-7z"/></svg>
+            <span>JUMP</span>
+          </button>
+          <button id="placeBtn" class="touch-btn place" aria-label="Place block">
+            <svg viewBox="0 0 24 24"><path d="M12 2l9 5v10l-9 5-9-5V7l9-5zm0 2.3L5.5 8 12 11.7 18.5 8 12 4.3zM5 9.7v6.1l6 3.3v-6.1L5 9.7zm8 9.4l6-3.3V9.7l-6 3.3v6.1z"/></svg>
+            <span>PLACE</span>
+          </button>
+          <button id="mineBtn" class="touch-btn mine" aria-label="Mine block">
+            <svg viewBox="0 0 24 24"><path d="M14.7 2.3l2 2-3.4 3.4 5 5 3.4-3.4 2 2-3.4 3.4-2-2-5.8 5.8-2-2 5.8-5.8-5-5L14.7 2.3zM7.9 13.5l2.6 2.6-4.2 4.2a1.84 1.84 0 0 1-2.6-2.6l4.2-4.2z"/></svg>
+            <span>MINE</span>
+          </button>
+        </div>
+
+        <div id="hotbarWrap">
+          <div id="hotbar" aria-label="Block hotbar"></div>
+          <button id="paletteBtn" class="palette-btn" title="Block library" aria-label="Open block library">
+            <svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5z"/></svg>
+          </button>
+        </div>
+        <div id="blockLabel" class="block-label"></div>
+        <div id="desktopHint"><span><b>WASD</b> move</span><span><b>SPACE</b> jump</span><span><b>CLICK</b> mine</span><span><b>RIGHT CLICK</b> place</span><span><b>1-9</b> blocks</span></div>
+      </div>
+
+      <div id="loading" class="screen">
+        <div class="loading-inner">
+          <div class="loading-cube"><span></span><span></span><span></span></div>
+          <h2>RAISING THE ISLAND</h2>
+          <p id="loadingText">Planting oak trees…</p>
+          <div class="loading-track"><div id="loadingFill"></div></div>
+        </div>
+      </div>
+
+      <div id="startScreen" class="screen hidden">
+        <div class="start-vignette"></div>
+        <div class="start-inner">
+          <div id="titleBlocks" class="title-blocks" aria-hidden="true"></div>
+          <p class="eyebrow">A POCKET-SIZED VOXEL WORLD</p>
+          <h1 class="game-title">BLOCK<span>ISLE</span></h1>
+          <p class="tagline">Mine, build and make a tiny island your own.</p>
+          <button id="playBtn" class="play-btn"><span class="play-icon"></span><span id="playLabel">PLAY</span></button>
+          <div class="control-chips">
+            <span class="chip touch-chip"><i class="chip-icon">◎</i> Joystick to move</span>
+            <span class="chip touch-chip"><i class="chip-icon">≡</i> Drag to look</span>
+            <span class="chip desktop-chip"><i class="chip-icon">⌨</i> WASD + mouse</span>
+            <span class="chip"><i class="chip-icon">⛏</i> Hold to mine</span>
+          </div>
+          <p id="startSaveNote" class="save-note"></p>
+        </div>
+        <div class="start-footer">BUILT FOR PHONES &amp; TABLETS · NO DOWNLOAD · AUTO-SAVES</div>
+      </div>
+
+      <div id="pauseScreen" class="screen hidden">
+        <div class="panel pause-panel">
+          <div class="panel-head">
+            <p class="eyebrow">TAKE A BREATH</p>
+            <h2>PAUSED</h2>
+          </div>
+          <button id="resumeBtn" class="menu-btn primary">RESUME</button>
+          <button id="pausePaletteBtn" class="menu-btn">BLOCK LIBRARY</button>
+          <button id="pauseHelpBtn" class="menu-btn">HOW TO PLAY</button>
+          <button id="newWorldBtn" class="menu-btn danger">NEW ISLAND</button>
+          <p id="pauseNote" class="panel-note"></p>
+          <div class="panel-stats">
+            <div><b id="statMined">0</b><span>BLOCKS MINED</span></div>
+            <div><b id="statPlaced">0</b><span>BLOCKS PLACED</span></div>
+            <div><b id="statPigs">0</b><span>ISLAND PIGS</span></div>
+          </div>
+          <p class="seed-note">SEED <b id="seedLabel">—</b></p>
+        </div>
+      </div>
+
+      <div id="paletteScreen" class="screen hidden">
+        <div class="panel library-panel">
+          <div class="panel-head">
+            <p class="eyebrow">FILL YOUR POCKETS</p>
+            <h2>BLOCK LIBRARY</h2>
+            <p class="panel-sub">Choose a block for the selected hotbar slot.</p>
+          </div>
+          <div id="paletteGrid" class="palette-grid"></div>
+          <button id="paletteClose" class="menu-btn primary">DONE</button>
+        </div>
+      </div>
+
+      <div id="helpScreen" class="screen hidden">
+        <div class="panel help-panel">
+          <div class="panel-head">
+            <p class="eyebrow">FIELD NOTES</p>
+            <h2>HOW TO PLAY</h2>
+          </div>
+          <div class="help-grid">
+            <div class="help-item"><span class="help-emoji">🕹</span><b>EXPLORE</b><p>Use the joystick or WASD. Drag the world to look around. Space jumps.</p></div>
+            <div class="help-item"><span class="help-emoji">⛏</span><b>MINE</b><p>Hold MINE, or left-click a block. Chop logs, dig stone, and gather materials.</p></div>
+            <div class="help-item"><span class="help-emoji">🧱</span><b>BUILD</b><p>Pick a block below, then tap PLACE or right-click. Build a tower, bridge or cosy hut.</p></div>
+            <div class="help-item"><span class="help-emoji">🐷</span><b>LIVING ISLAND</b><p>Pigs wander the meadows. The sun sets, stars come out, and fireflies drift by.</p></div>
+          </div>
+          <p class="help-tip">Complete island goals for a little confetti. Your world saves automatically.</p>
+          <button id="helpClose" class="menu-btn primary">GOT IT</button>
+        </div>
+      </div>
+
+      <div id="fade"></div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
