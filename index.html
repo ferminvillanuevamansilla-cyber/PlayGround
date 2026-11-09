@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yo-kai Watch: Calle de la Luna</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <div class="game-shell">
+      <header class="top-bar">
+        <div>
+          <div class="brand">Yo-kai Watch</div>
+          <div class="subtitle">Calle de la Luna</div>
+        </div>
+        <div class="status-row">
+          <div class="pill"><span>HP</span><strong id="hpValue">100</strong></div>
+          <div class="pill"><span>Espíritu</span><strong id="spiritValue">100</strong></div>
+          <div class="pill"><span>Monedas</span><strong id="coinValue">0</strong></div>
+        </div>
+      </header>
+
+      <main class="game-layout">
+        <section class="hud-panel left-panel">
+          <h2>Equipo</h2>
+          <ul id="teamList" class="team-list"></ul>
+
+          <h2 class="small-heading">Objetivo</h2>
+          <p id="objective">Atrápalos a todos antes de que la luna se esconda.</p>
+        </section>
+
+        <section class="arena-wrap">
+          <canvas id="gameCanvas" width="900" height="560" aria-label="Mapa nocturno de la ciudad"></canvas>
+          <div class="touch-controls" aria-label="Controles táctiles">
+            <div class="dpad">
+              <button data-key="arrowup" aria-label="Arriba">▲</button>
+              <button data-key="arrowleft" aria-label="Izquierda">◀</button>
+              <button data-key="arrowdown" aria-label="Abajo">▼</button>
+              <button data-key="arrowright" aria-label="Derecha">▶</button>
+            </div>
+            <button class="interact-touch" id="interactTouch">E<br><small>USAR</small></button>
+          </div>
+          <div id="messageBox" class="message-box">Explora la ciudad, acércate a un Yo-kai y pulsa E para encontrarlo.</div>
+        </section>
+
+        <aside class="hud-panel right-panel">
+          <h2>Guía</h2>
+          <ul class="guide-list">
+            <li>WASD o flechas para moverte</li>
+            <li>Acércate y pulsa E para encontrar Yo-kai</li>
+            <li>Baja sus PS y usa Amistad para reclutarlos</li>
+          </ul>
+          <div id="battlePanel" class="battle-panel hidden">
+            <h3 id="battleTitle">Batalla</h3>
+            <div class="enemy-card">
+              <div id="battleEmoji" class="battle-emoji">👻</div>
+              <div>
+                <div id="battleName">Mochi</div>
+                <div id="battleHp">HP: 0</div>
+              </div>
+            </div>
+            <div class="battle-actions">
+              <button data-action="attack">Ataque</button>
+              <button data-action="spirit">Espíritu</button>
+              <button data-action="friend">Amistad</button>
+              <button data-action="heal">Curar</button>
+              <button data-action="run">Huir</button>
+            </div>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <script src="game.js"></script>
+  </body>
+</html>
